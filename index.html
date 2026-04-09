@@ -146,7 +146,7 @@
                 rgba(200, 120, 180, 0.25) 28px,
                 rgba(200, 120, 180, 0.25) 29px
             );
-            min-height: 420px;
+            min-height: 520px;
             position: relative;
             font-family: 'Segoe UI', 'Comic Sans MS', 'Brush Script MT', cursive;
             font-size: 18px;
@@ -154,38 +154,36 @@
             color: #3a1f4e;
         }
 
-        /* === MÀU CHỮ TRONG THƯ (GIỐNG MÀU "gửi Minh Châu") === */
         .handwriting {
             font-family: 'Segoe UI', 'Comic Sans MS', 'Brush Script MT', cursive;
             font-size: 19px;
             line-height: 29px;
-            color: #9b6bb3;  /* Màu tím giống chữ "gửi Minh Châu" */
+            color: #9b6bb3;
             padding: 5px 15px;
             background: transparent;
             width: 100%;
             border: none;
             resize: vertical;
             outline: none;
-            min-height: 400px;
+            min-height: 500px;
         }
 
         .handwriting:focus {
             background: rgba(220, 180, 240, 0.15);
         }
 
-        /* Style cho ô nhập khi bị khóa (readonly) - cũng màu giống nhau */
         .handwriting-readonly {
             font-family: 'Segoe UI', 'Comic Sans MS', 'Brush Script MT', cursive;
             font-size: 19px;
             line-height: 29px;
-            color: #9b6bb3;  /* Màu tím giống chữ "gửi Minh Châu" */
+            color: #9b6bb3;
             padding: 5px 15px;
             background: rgba(220, 180, 240, 0.1);
             width: 100%;
             border: none;
             resize: vertical;
             outline: none;
-            min-height: 400px;
+            min-height: 500px;
             cursor: default;
         }
 
@@ -309,7 +307,7 @@
             font-style: italic;
             font-family: 'Comic Sans MS', cursive;
             font-size: 17px;
-            color: #9b6bb3;  /* Màu này - đã lấy làm màu chữ thư */
+            color: #9b6bb3;
         }
 
         .toast {
@@ -369,7 +367,6 @@
             display: none;
         }
 
-        /* Badge khóa thư */
         .locked-badge {
             display: inline-block;
             background: #7b4c8c;
@@ -444,7 +441,7 @@
         <div class="ribbon"></div>
 
         <div class="kuromi-deco">
-            <img src="images/avtxitrum.jpg" alt="Kuromi mặt tròn">
+            <img src="images/avtxitrum.jpg" alt="avatar">
         </div>
 
         <div class="kuromi-corner">
@@ -457,7 +454,6 @@
             <span>💜 LETTER</span>
         </div>
 
-        <!-- Con dấu sáp - CLICK VÀO ĐÂY ĐỂ GỬI VÀ KHÓA THƯ -->
         <div class="wax-seal" onclick="sendAndLockLetter()">
             <img src="images/kuromi1.png" alt="Skull Kuromi">
         </div>
@@ -465,12 +461,21 @@
         <div style="text-align: center;">
             <div class="letter-header">  
                 🧁 Chúc mừng sinh nhật  🧁
-            
             </div>
         </div>
 
         <div class="letter-content">
-            <textarea id="letterText" class="handwriting" placeholder="Viết điều bạn muốn nói ở đây..."></textarea>
+            <textarea id="letterText" class="handwriting" placeholder="Viết điều bạn muốn nói ở đây...">Happy birthday em,
+
+Chúc em có một ngày nhẹ nhàng. Anh mong tuổi mới sẽ mang đến cho em những điều tốt đẹp, từ học hành, cuộc sống cho đến những ước mơ mà em theo đuổi. Mong em vui vẻ và đừng quên dành thời gian để nghỉ ngơi, thư giãn một chút nhé !
+
+Anh biết em có thể làm được nhiều thứ và nếu đôi khi khó quá không biết làm có thể nhờ anh, anh sẽ giúp khi em cần.
+
+Anh hy vọng tuổi mới của em sẽ ít áp lực, ít mệt mỏi hơn, vì em xứng đáng với những điều dịu dàng tốt đẹp nhất.
+
+Mong em gặp được nhiều điều may mắn và mọi thứ suôn sẻ với em hơn. Có thể đôi khi em thấy không ổn nhưng anh thấy em luôn luôn mạnh mẽ vượt qua được mà. Vì mắt em yếu nên anh mong là công chúa xì trùm đừng có khóc mỗi khi em thấy áp lực nhé.
+
+Thương,</textarea>
         </div>
 
         <div class="closing">
@@ -479,8 +484,6 @@
                 <img src="images/kuromi1.png" alt="icon" style="width: 30px; height: auto;">
             </span>
         </div>
-
-    
 
     </div>
 </div>
@@ -500,7 +503,6 @@
             }, 10);
         }
 
-        // Kiểm tra xem đã có thư được lưu và khóa chưa
         const savedContent = localStorage.getItem('savedHandwrittenLetter');
         const wasLocked = localStorage.getItem('letterLocked') === 'true';
         
@@ -510,13 +512,11 @@
         }
     }
 
-    // Hàm gửi và khóa thư (gọi khi click vào con dấu sáp)
     function sendAndLockLetter() {
         const letterContent = document.getElementById('letterText').value.trim();
         
-        // Kiểm tra nếu thư đã bị khóa thì không làm gì cả
         if (document.getElementById('letterText').readOnly) {
-            showToast("🔒 Thư đã được khóa rồi! Không thể gửi lại.", "#7b4c8c");
+            showToast("🔒 Thư đã được khóa rồi!", "#7b4c8c");
             return;
         }
         
@@ -525,7 +525,6 @@
             return;
         }
 
-        // Lưu nội dung và khóa thư
         localStorage.setItem('savedHandwrittenLetter', letterContent);
         localStorage.setItem('letterLocked', 'true');
         
@@ -537,20 +536,15 @@
         const textarea = document.getElementById('letterText');
         const lockedBadge = document.getElementById('lockedBadge');
         
-        // Đổi class để thay đổi style
         textarea.classList.remove('handwriting');
         textarea.classList.add('handwriting-readonly');
-        
-        // Khóa không cho sửa
         textarea.readOnly = true;
         
-        // Hiện badge khóa (nếu có)
         if (lockedBadge) {
             lockedBadge.classList.remove('hidden');
         }
         
         if (!isFromLoad) {
-            // Hiệu ứng rung nhẹ cho con dấu khi khóa thành công
             const seal = document.querySelector('.wax-seal');
             if (seal) {
                 seal.style.transform = 'scale(1.1)';
@@ -571,20 +565,15 @@
         }, 3000);
     }
 
-    // Khôi phục nội dung đã lưu khi tải trang
     window.onload = () => {
         const saved = localStorage.getItem('savedHandwrittenLetter');
         const wasLocked = localStorage.getItem('letterLocked') === 'true';
         
-        if (saved) {
+        if (saved && wasLocked) {
             document.getElementById('letterText').value = saved;
-            
-            // Nếu trước đó đã khóa và phong bì đã mở, tự động khóa lại
-            if (wasLocked) {
-                const isOpen = !document.getElementById('envelopeOpen').classList.contains('hidden');
-                if (isOpen) {
-                    lockLetter(true);
-                }
+            const isOpen = !document.getElementById('envelopeOpen').classList.contains('hidden');
+            if (isOpen) {
+                lockLetter(true);
             }
         }
     };
