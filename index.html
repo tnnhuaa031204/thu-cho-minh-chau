@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title> 🪻 Món quà nhỏ 🪻</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: url('images/background.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 30px 20px;
+            font-family: 'Segoe UI', 'Brush Script MT', 'Comic Sans MS', cursive;
+            position: relative;
+        }
+
+        .envelope-closed {
+            max-width: 950px;
+            width: 100%;
+            background: #3d2b5a;
+            border-radius: 12px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1);
+            padding: 25px;
+            position: relative;
+            border: 1px solid #7e5a9e;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .envelope-closed:hover {
+            transform: scale(1.02);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.6);
+        }
+
+        .envelope-closed::before {
+            content: "";
+            position: absolute;
+            top: -20px;
+            left: 20px;
+            right: 20px;
+            height: 40px;
+            background: #4a356e;
+            border-radius: 50% 50% 0 0;
+            box-shadow: 0 -5px 10px rgba(0,0,0,0.2);
+        }
+
+        .envelope-front {
+            text-align: center;
+            padding: 60px 30px;
+            color: #e0c8f0;
+        }
+
+        .envelope-front h2 {
+            font-family: 'Comic Sans MS', cursive;
+            font-size: 28px;
+            margin-bottom: 15px;
+            color: #f0d8ff;
+        }
+
+        .envelope-front p {
+            font-family: monospace;
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        .open-hint {
+            margin-top: 30px;
+            font-size: 16px;
+            animation: bounce 1.5s ease infinite;
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 8px 20px;
+            border-radius: 50px;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+        }
+
+        .envelope-open {
+            max-width: 950px;
+            width: 100%;
+            background: #3d2b5a;
+            border-radius: 12px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1);
+            padding: 25px;
+            position: relative;
+            border: 1px solid #7e5a9e;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .envelope-open::before {
+            content: "";
+            position: absolute;
+            top: -20px;
+            left: 20px;
+            right: 20px;
+            height: 40px;
+            background: #4a356e;
+            border-radius: 50% 50% 0 0;
+            box-shadow: 0 -5px 10px rgba(0,0,0,0.2);
+        }
+
+        .letter {
+            background: #fff5fd;
+            padding: 40px 35px 45px 35px;
+            border-radius: 20px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.3), inset 0 0 0 1px rgba(255,200,230,0.8);
+            position: relative;
+            transition: all 0.3s ease;
+            animation: slideUp 0.6s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .letter-content {
+            background-image: repeating-linear-gradient(
+                transparent,
+                transparent 28px,
+                rgba(200, 120, 180, 0.25) 28px,
+                rgba(200, 120, 180, 0.25) 29px
+            );
+            min-height: 420px;
+            position: relative;
+            font-family: 'Segoe UI', 'Comic Sans MS', 'Brush Script MT', cursive;
+            font-size: 18px;
+            line-height: 29px;
+            color: #3a1f4e;
+        }
+
+        /* === MÀU CHỮ TRONG THƯ (GIỐNG MÀU "gửi Minh Châu") === */
+        .handwriting {
+            font-family: 'Segoe UI', 'Comic Sans MS', 'Brush Script MT', cursive;
+            font-size: 19px;
+            line-height: 29px;
+            color: #9b6bb3;  /* Màu tím giống chữ "gửi Minh Châu" */
+            padding: 5px 15px;
+            background: transparent;
+            width: 100%;
+            border: none;
+            resize: vertical;
+            outline: none;
+            min-height: 400px;
+        }
+
+        .handwriting:focus {
+            background: rgba(220, 180, 240, 0.15);
+        }
+
+        /* Style cho ô nhập khi bị khóa (readonly) - cũng màu giống nhau */
+        .handwriting-readonly {
+            font-family: 'Segoe UI', 'Comic Sans MS', 'Brush Script MT', cursive;
+            font-size: 19px;
+            line-height: 29px;
+            color: #9b6bb3;  /* Màu tím giống chữ "gửi Minh Châu" */
+            padding: 5px 15px;
+            background: rgba(220, 180, 240, 0.1);
+            width: 100%;
+            border: none;
+            resize: vertical;
+            outline: none;
+            min-height: 400px;
+            cursor: default;
+        }
+
+        .kuromi-deco {
+            position: absolute;
+            top: -15px;
+            left: -15px;
+            width: 85px;
+            height: 85px;
+            background: #e5e1e9;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 5px 12px rgba(0,0,0,0.2);
+            z-index: 12;
+            transition: transform 0.3s;
+            overflow: hidden;
+        }
+        
+        .kuromi-deco img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+        
+        .kuromi-deco:hover {
+            transform: rotate(10deg);
+        }
+
+        .kuromi-corner {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            width: 50px;
+            height: 50px;
+            opacity: 0.7;
+            z-index: 8;
+            pointer-events: none;
+        }
+        
+        .kuromi-corner img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .wax-seal {
+            position: absolute;
+            bottom: 20px;
+            left: 30px;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.2s;
+            z-index: 10;
+            overflow: hidden;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.4);
+        }
+        
+        .wax-seal img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .wax-seal:hover {
+            transform: scale(1.05);
+        }
+
+        .stamp {
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            width: 80px;
+            height: 95px;
+            background: #f7e6f5;
+            border: 2px dashed #b76eb3;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-family: monospace;
+            color: #7b4c8c;
+            transform: rotate(6deg);
+            z-index: 5;
+            border-radius: 5px;
+            text-align: center;
+        }
+        
+        .stamp img {
+            width: 45px;
+            height: 45px;
+            object-fit: contain;
+            margin-bottom: 4px;
+        }
+        
+        .stamp span {
+            font-size: 9px;
+        }
+
+        .letter-header {
+            font-family: 'Comic Sans MS', 'Georgia', serif;
+            font-size: 26px;
+            text-align: center;
+            margin-bottom: 20px;
+            color: #b76eb3;
+            border-bottom: 2px dotted #e6b8df;
+            display: inline-block;
+            width: auto;
+            padding: 0 20px 8px;
+        }
+
+        .closing {
+            margin-top: 30px;
+            text-align: right;
+            font-style: italic;
+            font-family: 'Comic Sans MS', cursive;
+            font-size: 17px;
+            color: #9b6bb3;  /* Màu này - đã lấy làm màu chữ thư */
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #7b4c8c;
+            color: #ffe6fa;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-family: monospace;
+            font-size: 14px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        .ribbon {
+            position: absolute;
+            top: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 25px;
+            background: #d98fcb;
+            border-radius: 30px 30px 0 0;
+            z-index: 11;
+        }
+
+        .floating-kuromi {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            width: 50px;
+            height: 50px;
+            opacity: 0.35;
+            pointer-events: none;
+            z-index: 99;
+            animation: float 4s ease-in-out infinite;
+        }
+        
+        .floating-kuromi img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Badge khóa thư */
+        .locked-badge {
+            display: inline-block;
+            background: #7b4c8c;
+            color: white;
+            font-size: 12px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+
+        @media (max-width: 600px) {
+            .letter {
+                padding: 25px 18px;
+            }
+            .handwriting, .handwriting-readonly {
+                font-size: 15px;
+            }
+            .stamp {
+                width: 65px;
+                height: 80px;
+                top: 10px;
+                right: 10px;
+            }
+            .stamp img {
+                width: 35px;
+                height: 35px;
+            }
+            .wax-seal {
+                width: 55px;
+                height: 55px;
+            }
+            .kuromi-deco {
+                width: 65px;
+                height: 65px;
+                top: -10px;
+                left: -10px;
+            }
+            .floating-kuromi {
+                width: 40px;
+                height: 40px;
+            }
+            .envelope-front h2 {
+                font-size: 22px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="floating-kuromi">
+    <img src="images/kuromi1.png" alt="Kuromi bay">
+</div>
+
+<!-- PHONG BÌ ĐÓNG (BAN ĐẦU) -->
+<div id="envelopeClosed" class="envelope-closed" onclick="openLetter()">
+    <div class="envelope-front">
+        <div class="stamp-icon">
+            <img src="images/kuromi1.png" alt="icon" style="width: 60px; height: auto;">
+        </div>
+        <h2> Thư gửi cho Minh Châu </h2>
+        <p>Một bức thư dành cho xì trum ton ton ...</p>
+        <div class="open-hint">
+             BẤM VÀO ĐÂY ĐỂ MỞ THƯ 
+        </div>
+    </div>
+</div>
+
+<!-- PHONG BÌ MỞ (ẨN BAN ĐẦU) -->
+<div id="envelopeOpen" class="envelope-open hidden">
+    <div class="letter">
+        <div class="ribbon"></div>
+
+        <div class="kuromi-deco">
+            <img src="images/avtxitrum.jpg" alt="Kuromi mặt tròn">
+        </div>
+
+        <div class="kuromi-corner">
+            <img src="images/kuromi1.png" alt="Kuromi nhỏ">
+        </div>
+
+        <div class="stamp">
+            <img src="images/kuromi1.png" alt="Kuromi tem">
+            <span>KUROMI</span>
+            <span>💜 LETTER</span>
+        </div>
+
+        <!-- Con dấu sáp - CLICK VÀO ĐÂY ĐỂ GỬI VÀ KHÓA THƯ -->
+        <div class="wax-seal" onclick="sendAndLockLetter()">
+            <img src="images/kuromi1.png" alt="Skull Kuromi">
+        </div>
+
+        <div style="text-align: center;">
+            <div class="letter-header">  
+                🧁 Chúc mừng sinh nhật  🧁
+            
+            </div>
+        </div>
+
+        <div class="letter-content">
+            <textarea id="letterText" class="handwriting" placeholder="Viết điều bạn muốn nói ở đây..."></textarea>
+        </div>
+
+        <div class="closing">
+            <span id="signature">gửi Minh Châu,</span><br>
+            <span>
+                <img src="images/kuromi1.png" alt="icon" style="width: 30px; height: auto;">
+            </span>
+        </div>
+
+    
+
+    </div>
+</div>
+
+<div id="toastMsg" class="toast">💜🐰 Đã gửi thư! Cảm ơn bạn.</div>
+
+<script>
+    function openLetter() {
+        document.getElementById('envelopeClosed').classList.add('hidden');
+        document.getElementById('envelopeOpen').classList.remove('hidden');
+        
+        const letter = document.querySelector('#envelopeOpen .letter');
+        if (letter) {
+            letter.style.animation = 'none';
+            setTimeout(() => {
+                letter.style.animation = 'slideUp 0.6s ease';
+            }, 10);
+        }
+
+        // Kiểm tra xem đã có thư được lưu và khóa chưa
+        const savedContent = localStorage.getItem('savedHandwrittenLetter');
+        const wasLocked = localStorage.getItem('letterLocked') === 'true';
+        
+        if (savedContent && wasLocked) {
+            document.getElementById('letterText').value = savedContent;
+            lockLetter(true);
+        }
+    }
+
+    // Hàm gửi và khóa thư (gọi khi click vào con dấu sáp)
+    function sendAndLockLetter() {
+        const letterContent = document.getElementById('letterText').value.trim();
+        
+        // Kiểm tra nếu thư đã bị khóa thì không làm gì cả
+        if (document.getElementById('letterText').readOnly) {
+            showToast("🔒 Thư đã được khóa rồi! Không thể gửi lại.", "#7b4c8c");
+            return;
+        }
+        
+        if (!letterContent) {
+            showToast("✍️ Hãy viết điều gì đó trước khi đóng dấu nhé!", "#7b4c8c");
+            return;
+        }
+
+        // Lưu nội dung và khóa thư
+        localStorage.setItem('savedHandwrittenLetter', letterContent);
+        localStorage.setItem('letterLocked', 'true');
+        
+        lockLetter(false);
+        showToast("📮 Đã đóng dấu thư! Thư không thể sửa nữa.", "#5e3370");
+    }
+
+    function lockLetter(isFromLoad = false) {
+        const textarea = document.getElementById('letterText');
+        const lockedBadge = document.getElementById('lockedBadge');
+        
+        // Đổi class để thay đổi style
+        textarea.classList.remove('handwriting');
+        textarea.classList.add('handwriting-readonly');
+        
+        // Khóa không cho sửa
+        textarea.readOnly = true;
+        
+        // Hiện badge khóa (nếu có)
+        if (lockedBadge) {
+            lockedBadge.classList.remove('hidden');
+        }
+        
+        if (!isFromLoad) {
+            // Hiệu ứng rung nhẹ cho con dấu khi khóa thành công
+            const seal = document.querySelector('.wax-seal');
+            if (seal) {
+                seal.style.transform = 'scale(1.1)';
+                setTimeout(() => {
+                    seal.style.transform = '';
+                }, 300);
+            }
+        }
+    }
+
+    function showToast(msg, bgColor) {
+        const toast = document.getElementById('toastMsg');
+        toast.style.backgroundColor = bgColor || '#7b4c8c';
+        toast.textContent = msg;
+        toast.style.opacity = '1';
+        setTimeout(() => {
+            toast.style.opacity = '0';
+        }, 3000);
+    }
+
+    // Khôi phục nội dung đã lưu khi tải trang
+    window.onload = () => {
+        const saved = localStorage.getItem('savedHandwrittenLetter');
+        const wasLocked = localStorage.getItem('letterLocked') === 'true';
+        
+        if (saved) {
+            document.getElementById('letterText').value = saved;
+            
+            // Nếu trước đó đã khóa và phong bì đã mở, tự động khóa lại
+            if (wasLocked) {
+                const isOpen = !document.getElementById('envelopeOpen').classList.contains('hidden');
+                if (isOpen) {
+                    lockLetter(true);
+                }
+            }
+        }
+    };
+</script>
+</body>
+</html>
